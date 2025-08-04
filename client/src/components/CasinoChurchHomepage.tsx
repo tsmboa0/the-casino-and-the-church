@@ -56,6 +56,13 @@ const CasinoChurchHomepage: React.FC = () => {
           onMouseLeave={() => setHoveredSide(null)}
         >
           <div className="casino-background">
+            {/* Dark atmospheric fog */}
+            <div className="casino-fog">
+              <div className="fog-layer fog-1"></div>
+              <div className="fog-layer fog-2"></div>
+              <div className="fog-layer fog-3"></div>
+            </div>
+            
             <div className="neon-signs">
               <div className="neon-sign neon-purple">$$$</div>
               <div className="neon-sign neon-gold">JACKPOT</div>
@@ -75,6 +82,13 @@ const CasinoChurchHomepage: React.FC = () => {
               <div className="poster poster-1">🚀</div>
               <div className="poster poster-2">💎</div>
               <div className="poster poster-3">🦍</div>
+            </div>
+            
+            {/* Dark smoke effects */}
+            <div className="smoke-effects">
+              <div className="smoke smoke-1"></div>
+              <div className="smoke smoke-2"></div>
+              <div className="smoke smoke-3"></div>
             </div>
           </div>
 
@@ -122,6 +136,13 @@ const CasinoChurchHomepage: React.FC = () => {
           onMouseLeave={() => setHoveredSide(null)}
         >
           <div className="church-background">
+            {/* Mystical darkness and shadows */}
+            <div className="church-shadows">
+              <div className="shadow-layer shadow-1"></div>
+              <div className="shadow-layer shadow-2"></div>
+              <div className="shadow-layer shadow-3"></div>
+            </div>
+            
             <div className="stained-glass">
               <div className="glass-panel panel-1"></div>
               <div className="glass-panel panel-2"></div>
@@ -140,6 +161,13 @@ const CasinoChurchHomepage: React.FC = () => {
               <div className="symbol symbol-1">✨</div>
               <div className="symbol symbol-2">🙏</div>
               <div className="symbol symbol-3">⭐</div>
+            </div>
+            
+            {/* Ethereal mist effects */}
+            <div className="ethereal-mist">
+              <div className="mist mist-1"></div>
+              <div className="mist mist-2"></div>
+              <div className="mist mist-3"></div>
             </div>
           </div>
 

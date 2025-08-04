@@ -29,8 +29,20 @@
   width: 100%;
   height: 100%;
   position: relative;
-  background: #000;
+  background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
   font-family: 'Press Start 2P', cursive;
+}
+
+.homepage-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><defs><pattern id="grain" patternUnits="userSpaceOnUse" width="100" height="100"><circle cx="50" cy="50" r="0.5" fill="%23ffffff" opacity="0.02"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  opacity: 0.3;
+  z-index: 0;
 }
 
 /* Game Title */
@@ -111,7 +123,39 @@
 
 /* Casino Side */
 .casino-side {
-  background: linear-gradient(135deg, #1a0033, #330066, #0a0a2e);
+  background: linear-gradient(135deg, #0d0015, #1a0033, #0a0a1a);
+  position: relative;
+}
+
+.casino-side::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(ellipse at 20% 80%, rgba(255, 0, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.9) 100%);
+  z-index: 1;
+}
+
+.casino-side::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 0, 255, 0.03) 2px,
+    rgba(255, 0, 255, 0.03) 4px
+  );
+  z-index: 3;
 }
 
 .casino-background {
@@ -121,6 +165,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  z-index: 2;
 }
 
 .neon-signs {
@@ -136,7 +181,12 @@
   font-size: clamp(12px, 3vw, 24px);
   font-weight: bold;
   animation: neonFlicker 2s infinite alternate;
-  text-shadow: 0 0 10px currentColor;
+  text-shadow: 
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 20px currentColor,
+    0 0 40px currentColor;
+  filter: drop-shadow(0 0 10px currentColor);
 }
 
 .neon-purple {
@@ -182,10 +232,14 @@
 
 .light {
   position: absolute;
-  width: 4px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   animation: lightDance 1.5s infinite ease-in-out;
+  box-shadow: 
+    0 0 10px currentColor,
+    0 0 20px currentColor,
+    0 0 30px currentColor;
 }
 
 .light-1 {
@@ -250,7 +304,35 @@
 
 /* Church Side */
 .church-side {
-  background: linear-gradient(135deg, #1a1a2e, #16213e, #2d1b2e);
+  background: linear-gradient(135deg, #0f0f1a, #1a1a2e, #0d0d1a);
+  position: relative;
+}
+
+.church-side::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(ellipse at 50% 30%, rgba(255, 215, 0, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 30% 70%, rgba(135, 206, 235, 0.08) 0%, transparent 50%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.95) 100%);
+  z-index: 1;
+}
+
+.church-side::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255, 215, 0, 0.02) 0%, transparent 30%),
+    radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.02) 0%, transparent 30%);
+  z-index: 3;
 }
 
 .church-background {
@@ -260,6 +342,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  z-index: 2;
 }
 
 .stained-glass {
@@ -276,6 +359,10 @@
   height: 60px;
   border-radius: 15px 15px 0 0;
   animation: glassGlow 4s infinite ease-in-out;
+  box-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.3),
+    inset 0 0 10px rgba(255, 255, 255, 0.1);
+  filter: blur(0.5px);
 }
 
 .panel-1 {
@@ -383,6 +470,7 @@
   align-items: center;
   gap: 20px;
   z-index: 50;
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.8));
 }
 
 /* Avatars */
@@ -741,6 +829,182 @@
     bottom: 10px;
     flex-direction: column;
     gap: 5px;
+  }
+}
+
+/* Atmospheric Effects */
+.casino-fog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.fog-layer {
+  position: absolute;
+  width: 150%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, rgba(255, 0, 255, 0.1) 0%, transparent 70%);
+  animation: fogDrift 15s infinite linear;
+}
+
+.fog-1 {
+  top: 20%;
+  left: -25%;
+  animation-delay: 0s;
+  background: radial-gradient(ellipse at center, rgba(255, 0, 255, 0.08) 0%, transparent 60%);
+}
+
+.fog-2 {
+  top: 60%;
+  left: -25%;
+  animation-delay: 5s;
+  background: radial-gradient(ellipse at center, rgba(0, 255, 255, 0.06) 0%, transparent 70%);
+}
+
+.fog-3 {
+  top: 40%;
+  left: -25%;
+  animation-delay: 10s;
+  background: radial-gradient(ellipse at center, rgba(255, 0, 128, 0.05) 0%, transparent 80%);
+}
+
+.smoke-effects {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  z-index: 2;
+}
+
+.smoke {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.3) 0%, transparent 70%);
+  animation: smokeRise 8s infinite ease-out;
+}
+
+.smoke-1 {
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.smoke-2 {
+  left: 50%;
+  animation-delay: 3s;
+}
+
+.smoke-3 {
+  right: 10%;
+  animation-delay: 6s;
+}
+
+.church-shadows {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.shadow-layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.4) 70%);
+  animation: shadowShift 12s infinite ease-in-out;
+}
+
+.shadow-1 {
+  animation-delay: 0s;
+  background: radial-gradient(ellipse at 30% 70%, transparent 0%, rgba(0, 0, 0, 0.3) 60%);
+}
+
+.shadow-2 {
+  animation-delay: 4s;
+  background: radial-gradient(ellipse at 70% 30%, transparent 0%, rgba(0, 0, 0, 0.25) 65%);
+}
+
+.shadow-3 {
+  animation-delay: 8s;
+  background: radial-gradient(ellipse at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.2) 70%);
+}
+
+.ethereal-mist {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.mist {
+  position: absolute;
+  width: 120%;
+  height: 60%;
+  background: linear-gradient(45deg, transparent 0%, rgba(255, 215, 0, 0.03) 50%, transparent 100%);
+  animation: mistFloat 20s infinite ease-in-out;
+}
+
+.mist-1 {
+  top: 10%;
+  left: -10%;
+  animation-delay: 0s;
+}
+
+.mist-2 {
+  top: 50%;
+  left: -10%;
+  animation-delay: 7s;
+}
+
+.mist-3 {
+  top: 30%;
+  left: -10%;
+  animation-delay: 14s;
+}
+
+/* Atmospheric Animations */
+@keyframes fogDrift {
+  0% { transform: translateX(-25%); }
+  100% { transform: translateX(25%); }
+}
+
+@keyframes smokeRise {
+  0% { 
+    transform: translateY(100px) scale(0.5);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-50px) scale(1);
+    opacity: 0.4;
+  }
+  100% { 
+    transform: translateY(-200px) scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes shadowShift {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(1.1); }
+}
+
+@keyframes mistFloat {
+  0%, 100% { 
+    transform: translateX(-10%) translateY(0px);
+    opacity: 0.3;
+  }
+  50% { 
+    transform: translateX(10%) translateY(-10px);
+    opacity: 0.1;
   }
 }
 
