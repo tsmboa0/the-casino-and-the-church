@@ -1,0 +1,761 @@
+/* Import pixel font */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* Loading Screen */
+.loading-screen {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.pixel-loader {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 16px;
+  animation: blink 1s infinite;
+}
+
+/* Main Container */
+.app-container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.homepage-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: #000;
+  font-family: 'Press Start 2P', cursive;
+}
+
+/* Game Title */
+.game-title {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  text-align: center;
+}
+
+.pixel-title {
+  font-size: clamp(16px, 4vw, 32px);
+  color: #fff;
+  text-shadow: 
+    2px 2px 0px #ff00ff,
+    4px 4px 0px #00ffff;
+  margin: 0;
+  letter-spacing: 2px;
+  animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+.balance-meter {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.balance-icon {
+  font-size: 16px;
+}
+
+.balance-bar {
+  width: 100px;
+  height: 8px;
+  background: #333;
+  border: 2px solid #fff;
+  position: relative;
+}
+
+.balance-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #ff00ff, #00ffff);
+  transition: width 0.5s ease;
+}
+
+/* Split Container */
+.split-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.desktop .split-container {
+  flex-direction: row;
+}
+
+.mobile .split-container {
+  flex-direction: column;
+}
+
+/* Side Containers */
+.side {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.side.hovered {
+  transform: scale(1.02);
+  z-index: 10;
+}
+
+/* Casino Side */
+.casino-side {
+  background: linear-gradient(135deg, #1a0033, #330066, #0a0a2e);
+}
+
+.casino-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.neon-signs {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  width: 100%;
+  height: 30%;
+}
+
+.neon-sign {
+  position: absolute;
+  font-size: clamp(12px, 3vw, 24px);
+  font-weight: bold;
+  animation: neonFlicker 2s infinite alternate;
+  text-shadow: 0 0 10px currentColor;
+}
+
+.neon-purple {
+  color: #ff00ff;
+  top: 10%;
+  left: 10%;
+}
+
+.neon-gold {
+  color: #ffd700;
+  top: 20%;
+  right: 15%;
+}
+
+.neon-pink {
+  color: #ff1493;
+  bottom: 10%;
+  left: 20%;
+}
+
+.slot-machines {
+  position: absolute;
+  bottom: 20%;
+  right: 10%;
+}
+
+.slot-machine {
+  width: 30px;
+  height: 40px;
+  background: linear-gradient(to bottom, #333, #666);
+  border: 2px solid #ffd700;
+  margin: 5px;
+  animation: slotSpin 3s infinite linear;
+}
+
+.dancing-lights {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.light {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: lightDance 1.5s infinite ease-in-out;
+}
+
+.light-1 {
+  background: #ff00ff;
+  top: 30%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.light-2 {
+  background: #00ffff;
+  top: 60%;
+  right: 30%;
+  animation-delay: 0.5s;
+}
+
+.light-3 {
+  background: #ffff00;
+  bottom: 40%;
+  left: 40%;
+  animation-delay: 1s;
+}
+
+.light-4 {
+  background: #ff0080;
+  top: 50%;
+  right: 10%;
+  animation-delay: 1.5s;
+}
+
+.meme-posters {
+  position: absolute;
+  left: 5%;
+  top: 40%;
+  width: 30%;
+  height: 40%;
+}
+
+.poster {
+  position: absolute;
+  font-size: 20px;
+  animation: posterFloat 3s infinite ease-in-out;
+}
+
+.poster-1 {
+  top: 0;
+  left: 0;
+  animation-delay: 0s;
+}
+
+.poster-2 {
+  top: 30%;
+  right: 0;
+  animation-delay: 1s;
+}
+
+.poster-3 {
+  bottom: 0;
+  left: 50%;
+  animation-delay: 2s;
+}
+
+/* Church Side */
+.church-side {
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #2d1b2e);
+}
+
+.church-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.stained-glass {
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  width: 30%;
+  height: 50%;
+}
+
+.glass-panel {
+  position: absolute;
+  width: 30px;
+  height: 60px;
+  border-radius: 15px 15px 0 0;
+  animation: glassGlow 4s infinite ease-in-out;
+}
+
+.panel-1 {
+  background: linear-gradient(to bottom, #ffd700, #ffb347);
+  left: 0;
+  animation-delay: 0s;
+}
+
+.panel-2 {
+  background: linear-gradient(to bottom, #4169e1, #6495ed);
+  left: 35px;
+  animation-delay: 1s;
+}
+
+.panel-3 {
+  background: linear-gradient(to bottom, #dc143c, #ff6347);
+  left: 70px;
+  animation-delay: 2s;
+}
+
+.floating-scrolls {
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  width: 40%;
+  height: 40%;
+}
+
+.scroll {
+  position: absolute;
+  font-size: 16px;
+  animation: scrollFloat 5s infinite ease-in-out;
+}
+
+.scroll-1 {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.scroll-2 {
+  bottom: 30%;
+  right: 10%;
+  animation-delay: 2.5s;
+}
+
+.pulpit {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.candle {
+  font-size: 14px;
+  animation: candleFlicker 2s infinite ease-in-out;
+}
+
+.candle-1 { animation-delay: 0s; }
+.candle-2 { animation-delay: 0.7s; }
+.candle-3 { animation-delay: 1.4s; }
+
+.holy-symbols {
+  position: absolute;
+  top: 50%;
+  right: 20%;
+  width: 20%;
+  height: 30%;
+}
+
+.symbol {
+  position: absolute;
+  font-size: 12px;
+  animation: symbolTwinkle 3s infinite ease-in-out;
+}
+
+.symbol-1 {
+  top: 0;
+  left: 0;
+  animation-delay: 0s;
+}
+
+.symbol-2 {
+  top: 50%;
+  right: 0;
+  animation-delay: 1s;
+}
+
+.symbol-3 {
+  bottom: 0;
+  left: 50%;
+  animation-delay: 2s;
+}
+
+/* Side Content */
+.side-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  z-index: 50;
+}
+
+/* Avatars */
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.casino-avatar,
+.church-avatar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-body {
+  position: relative;
+}
+
+.avatar-head {
+  font-size: 40px;
+  margin-bottom: 10px;
+  animation: avatarBob 2s infinite ease-in-out;
+}
+
+.casino-avatar .avatar-outfit {
+  position: relative;
+  width: 60px;
+  height: 80px;
+}
+
+.flashy-jacket {
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00);
+  border-radius: 10px;
+  animation: jacketShimmer 2s infinite linear;
+}
+
+.gold-chain {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  border: 3px solid #ffd700;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffd700, #ffb347);
+}
+
+.sol-tokens {
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.token {
+  color: #ffd700;
+  font-size: 16px;
+  animation: tokenSpin 3s infinite linear;
+}
+
+.church-avatar .avatar-robes {
+  position: relative;
+  width: 60px;
+  height: 80px;
+}
+
+.digital-robe {
+  width: 100%;
+  height: 80%;
+  background: linear-gradient(to bottom, #4b0082, #191970);
+  border-radius: 0 0 15px 15px;
+  position: relative;
+}
+
+.digital-robe::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, #ffd700, transparent);
+  animation: robeGlow 3s infinite ease-in-out;
+}
+
+.holy-hood {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 30px;
+  background: #2f1b69;
+  border-radius: 20px 20px 0 0;
+}
+
+.glowing-ledger {
+  position: relative;
+  margin-top: 10px;
+}
+
+.ledger {
+  font-size: 20px;
+  color: #ffd700;
+}
+
+.ledger-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.5), transparent);
+  animation: ledgerPulse 2s infinite ease-in-out;
+}
+
+/* Buttons */
+.enter-button {
+  position: relative;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: clamp(10px, 2vw, 14px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  overflow: hidden;
+  background: transparent;
+  border: 2px solid;
+}
+
+.casino-button {
+  color: #ff00ff;
+  border-color: #ff00ff;
+  background: linear-gradient(45deg, rgba(255, 0, 255, 0.1), rgba(0, 255, 255, 0.1));
+}
+
+.casino-button:hover {
+  background: linear-gradient(45deg, rgba(255, 0, 255, 0.3), rgba(0, 255, 255, 0.3));
+  box-shadow: 0 0 20px #ff00ff, inset 0 0 20px rgba(255, 0, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.church-button {
+  color: #ffd700;
+  border-color: #ffd700;
+  background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 255, 255, 0.1));
+}
+
+.church-button:hover {
+  background: linear-gradient(45deg, rgba(255, 215, 0, 0.3), rgba(255, 255, 255, 0.3));
+  box-shadow: 0 0 20px #ffd700, inset 0 0 20px rgba(255, 215, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.button-icon {
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.button-glow {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s ease;
+}
+
+.enter-button:hover .button-glow {
+  left: 100%;
+}
+
+/* Tooltips */
+.tooltip {
+  font-size: clamp(8px, 1.5vw, 12px);
+  text-align: center;
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 10px;
+  animation: tooltipGlow 3s infinite ease-in-out;
+}
+
+.casino-tooltip {
+  color: #ff00ff;
+  background: rgba(255, 0, 255, 0.1);
+  border: 1px solid #ff00ff;
+}
+
+.church-tooltip {
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid #ffd700;
+}
+
+/* Branding */
+.branding {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 30px;
+  z-index: 100;
+}
+
+.mobile .branding {
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.solana-badge,
+.honeycomb-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #333;
+}
+
+.badge-text {
+  font-size: 8px;
+  color: #999;
+}
+
+.solana-logo {
+  font-size: 10px;
+  color: #00ff88;
+  font-weight: bold;
+}
+
+.honeycomb-logo {
+  font-size: 10px;
+  color: #ffb347;
+  font-weight: bold;
+}
+
+/* Animations */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes titleGlow {
+  from { text-shadow: 2px 2px 0px #ff00ff, 4px 4px 0px #00ffff; }
+  to { text-shadow: 2px 2px 0px #00ffff, 4px 4px 0px #ff00ff; }
+}
+
+@keyframes neonFlicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+  20%, 24%, 55% { opacity: 0.4; }
+}
+
+@keyframes slotSpin {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+@keyframes lightDance {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.8; }
+  50% { transform: translateY(-10px) scale(1.2); opacity: 1; }
+}
+
+@keyframes posterFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-5px) rotate(2deg); }
+}
+
+@keyframes glassGlow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}
+
+@keyframes scrollFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+
+@keyframes candleFlicker {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.9; }
+}
+
+@keyframes symbolTwinkle {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes avatarBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes jacketShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes tokenSpin {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+@keyframes robeGlow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes ledgerPulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.1); }
+}
+
+@keyframes tooltipGlow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .split-container {
+    flex-direction: column;
+  }
+  
+  .side {
+    min-height: 50vh;
+  }
+  
+  .pixel-title {
+    font-size: 14px;
+  }
+  
+  .avatar-head {
+    font-size: 30px;
+  }
+  
+  .enter-button {
+    padding: 12px 20px;
+    font-size: 10px;
+  }
+  
+  .branding {
+    bottom: 10px;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+/* Phaser Container */
+.phaser-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.phaser-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
