@@ -11,7 +11,7 @@ const __dirname = dirname(__filename);
 export default defineConfig({
   plugins: [
     react(),
-    runtimeErrorOverlay(),
+    // runtimeErrorOverlay({disable:true}),
     glsl(), // Add GLSL shader support
   ],
   resolve: {

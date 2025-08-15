@@ -1,0 +1,529 @@
+/* Import pixel font */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* Transition Screen */
+.transition-screen {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  animation: fadeOut 2s ease-in-out forwards;
+}
+
+.transition-text {
+  font-family: 'Press Start 2P', cursive;
+  font-size: clamp(16px, 3vw, 24px);
+  color: #ffd700;
+  text-shadow: 
+    0 0 10px #ffd700,
+    0 0 20px #ffd700,
+    0 0 30px #ffd700;
+  animation: textGlow 1s ease-in-out infinite alternate;
+}
+
+/* Main Container */
+.church-realm-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  font-family: 'Press Start 2P', cursive;
+  overflow: hidden;
+  background: #000;
+}
+
+/* Background */
+.church-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.church-background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: blur(1px);
+}
+
+/* Progress Bar */
+.faith-progress-container {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px 20px;
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+.faith-progress-bar {
+  position: relative;
+  width: 300px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #ffd700;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 
+    0 0 10px #ffd700,
+    inset 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.faith-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd700, #ffed4e, #ffd700);
+  transition: width 0.5s ease;
+  position: relative;
+  animation: progressGlow 2s ease-in-out infinite alternate;
+}
+
+.faith-progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #000;
+  font-size: 12px;
+  font-weight: bold;
+  text-shadow: 1px 1px 0px #fff;
+  z-index: 2;
+}
+
+.faith-value {
+  color: #ffd700;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 0 0 10px #ffd700;
+  min-width: 50px;
+  text-align: center;
+}
+
+.church-balance {
+  color: #ffd700;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 0 0 10px #ffd700;
+  min-width: 60px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 5px 10px;
+  border: 1px solid #ffd700;
+  border-radius: 4px;
+}
+
+.casino-balance {
+  color: #ff1493;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 0 0 10px #ff1493;
+  min-width: 60px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 5px 10px;
+  border: 1px solid #ff1493;
+  border-radius: 4px;
+}
+
+/* Back Button */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #ffd700;
+  border-radius: 0;
+  padding: 10px 15px;
+  color: #ffd700;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.back-button:hover {
+  background: rgba(255, 215, 0, 0.2);
+  box-shadow: 0 0 20px #ffd700;
+  transform: translateY(-2px);
+}
+
+.back-icon {
+  font-size: 14px;
+}
+
+.back-text {
+  font-weight: bold;
+}
+
+/* Main Content */
+.church-content {
+  position: relative;
+  z-index: 50;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 50px 50px;
+}
+
+/* Desktop Layout */
+.desktop .church-content {
+  flex-direction: row;
+  gap: 120px;
+  align-items: center;
+}
+
+/* Mobile Layout */
+.mobile .church-content {
+  flex-direction: column;
+  gap: 50px;
+  padding: 100px 20px 50px;
+  align-items: center;
+}
+
+/* Priest Container */
+.priest-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.priest-image {
+  position: relative;
+  z-index: 2;
+}
+
+.priest-image img {
+  width: 350px;
+  height: 350px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.8));
+  animation: priestFloat 3s ease-in-out infinite;
+}
+
+.priest-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
+  border-radius: 50%;
+  animation: glowPulse 2s ease-in-out infinite;
+  z-index: 1;
+}
+
+/* Activities Container */
+.activities-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 30px;
+  border: 3px solid #ffd700;
+  border-radius: 10px;
+  box-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.5),
+    inset 0 0 20px rgba(255, 215, 0, 0.1);
+}
+
+.activities-title {
+  color: #ffd700;
+  font-size: clamp(18px, 3vw, 28px);
+  text-align: center;
+  text-shadow: 
+    2px 2px 0px #000,
+    0 0 10px #ffd700,
+    0 0 20px #ffd700;
+  animation: titleGlow 3s ease-in-out infinite alternate;
+  margin: 0 0 20px 0;
+  font-weight: bold;
+}
+
+/* Activities Grid */
+.activities-grid {
+  display: grid;
+  gap: 15px;
+  width: 100%;
+}
+
+.desktop .activities-grid {
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(4, auto);
+  max-width: 400px;
+}
+
+.mobile .activities-grid {
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(4, auto);
+  width: 100%;
+  max-width: 350px;
+}
+
+/* Activity Buttons */
+.activity-button {
+  background: rgba(0, 0, 0, 0.9);
+  border: 3px solid #ffd700;
+  border-radius: 8px;
+  padding: 15px 20px;
+  color: #fff;
+  font-family: 'Press Start 2P', cursive;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  min-height: 60px;
+  box-shadow: 
+    0 0 15px rgba(255, 215, 0, 0.5),
+    inset 0 0 10px rgba(255, 215, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.activity-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.activity-button:hover::before {
+  left: 100%;
+}
+
+.activity-button:hover {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #ffed4e;
+  box-shadow: 
+    0 0 20px #ffd700,
+    inset 0 0 20px rgba(255, 215, 0, 0.3);
+  transform: translateY(-3px) scale(1.02);
+}
+
+.activity-emoji {
+  font-size: 28px;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+  min-width: 40px;
+  text-align: center;
+}
+
+.activity-name {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 1px 1px 0px #000;
+  flex: 1;
+  text-align: left;
+}
+
+.activity-description {
+  font-size: 10px;
+  color: #ccc;
+  text-align: left;
+  line-height: 1.4;
+  flex: 1;
+}
+
+/* Audio Control */
+.church-realm-container .audio-control {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #ffd700;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #ffd700;
+}
+
+.church-realm-container .audio-control:hover {
+  background: rgba(255, 215, 0, 0.2);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px #ffd700;
+}
+
+/* Animations */
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes textGlow {
+  from { text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700, 0 0 30px #ffd700; }
+  to { text-shadow: 0 0 15px #ffd700, 0 0 25px #ffd700, 0 0 35px #ffd700; }
+}
+
+@keyframes progressGlow {
+  from { box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.5); }
+  to { box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.8); }
+}
+
+@keyframes priestFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+@keyframes titleGlow {
+  from { text-shadow: 2px 2px 0px #000, 0 0 10px #ffd700, 0 0 20px #ffd700; }
+  to { text-shadow: 2px 2px 0px #000, 0 0 15px #ffd700, 0 0 25px #ffd700; }
+}
+
+/* Desktop Only Elements */
+.desktop-only {
+  display: inline;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+  .faith-progress-container {
+    top: 15px;
+    gap: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .faith-progress-bar {
+    width: 200px;
+    height: 30px;
+  }
+  
+  .faith-progress-text {
+    font-size: 10px;
+  }
+  
+  .faith-value {
+    font-size: 12px;
+  }
+  
+  .back-button {
+    top: 15px;
+    left: 15px;
+    padding: 10px;
+    font-size: 8px;
+    z-index: 101;
+    min-width: 40px;
+    justify-content: center;
+  }
+  
+  .priest-image img {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .priest-glow {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .activities-container {
+    padding: 20px;
+    gap: 15px;
+  }
+  
+  .activities-title {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  
+  .activity-button {
+    padding: 12px 15px;
+    min-height: 50px;
+    gap: 10px;
+  }
+  
+  .activity-emoji {
+    font-size: 20px;
+    min-width: 30px;
+  }
+  
+  .activity-name {
+    font-size: 10px;
+  }
+  
+  .activity-description {
+    font-size: 8px;
+  }
+  
+  .church-realm-container .audio-control {
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+}
+
+/* Pixel Art Enhancements */
+.church-realm-container * {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Mystical Effects */
+.activity-button,
+.back-button,
+.audio-control {
+  text-shadow: 0 0 5px currentColor;
+}
+
+/* Hover Effects */
+.activity-button:active {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.back-button:active {
+  transform: translateY(-1px);
+} 

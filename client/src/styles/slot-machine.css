@@ -1,0 +1,338 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.slot-machine-page {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  overflow-y: auto;
+  font-family: 'Press Start 2P', cursive;
+}
+
+.slot-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.slot-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slot-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.slot-back {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 20;
+  background: rgba(0,0,0,0.8);
+  color: #ff1493;
+  border: 2px solid #ff1493;
+  padding: 10px 15px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 20, 147, 0.4);
+}
+
+.slot-layout {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  align-items: center;
+  justify-items: center;
+  padding: 120px 60px 80px;
+}
+
+.machine-container {
+  position: relative;
+  width: min(640px, 92vw);
+  aspect-ratio: 1 / 1.05;
+}
+
+.machine-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 25px rgba(255, 20, 147, 0.3));
+}
+
+/* Reels overlay
+   These positions were tuned to match the provided slot_machine.png layout.
+   They are responsive using percentages to align over the empty reel windows. */
+.reel {
+  position: absolute;
+  width: 22.2%;
+  height: 36%;
+  top: 32.5%;
+  left: auto;
+  background: rgba(0,0,0,0.18);
+  border: 2px solid rgba(255,255,255,0.18);
+  overflow: hidden;
+}
+
+.reel-inner {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+  transform: translate3d(0,0,0);
+}
+
+.reel .symbol {
+  height: var(--item-h, 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reel-1 { left: 21.6%; }
+.reel-2 { left: 39.0%; }
+.reel-3 { left: 56.4%; }
+
+.symbol {
+  font-size: clamp(44px, 4.5vw, 64px);
+  color: #ff2a2a;
+  text-shadow: 2px 2px 0 #000, 0 0 6px rgba(0,0,0,0.5);
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: none;
+  line-height: 1;
+}
+
+.symbol.centered {
+  width: 100%;
+  height: 100%;
+}
+
+.controls-container {
+  width: 100%;
+  max-width: 520px;
+}
+
+.panel {
+  background: rgba(0, 0, 0, 0.7);
+  border: 3px solid #ff1493;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 0 25px rgba(255, 20, 147, 0.3);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.stat { 
+  background: rgba(0,0,0,0.6); 
+  border: 2px solid #ff1493; 
+  padding: 10px; 
+  text-align: center; 
+}
+.label { font-size: 10px; color: #ffb6e6; display:block; margin-bottom: 6px; }
+.value { font-size: 14px; color: #fff; }
+
+.bet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.bet-btn {
+  background: rgba(0,0,0,0.8);
+  border: 2px solid #ff1493;
+  color: #ffb6e6;
+  padding: 10px 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+.bet-btn:hover { background: rgba(255, 20, 147, 0.15); }
+
+.action-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.play-btn {
+  background: linear-gradient(45deg, #ff1493, #ff69b4);
+  color: #000;
+  border: 2px solid #ff69b4;
+  padding: 12px 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.play-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.cashout-btn {
+  background: rgba(0,0,0,0.8);
+  border: 2px solid #ff1493;
+  color: #fff;
+  padding: 12px 10px;
+  cursor: pointer;
+}
+
+/* Result Modal */
+.result-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.result-modal {
+  background: rgba(0,0,0,0.9);
+  border: 3px solid #ff1493;
+  padding: 24px;
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(255, 20, 147, 0.4);
+}
+
+.result-title { color: #ff69b4; font-size: 18px; margin-bottom: 10px; }
+.result-message { color: #fff; font-size: 12px; margin-bottom: 20px; }
+.result-close { 
+  background: linear-gradient(45deg, #ff1493, #ff69b4); 
+  border: 2px solid #ff69b4; 
+  color: #000; 
+  padding: 10px 14px; 
+  cursor: pointer; 
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+  .slot-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 110px 16px 120px;
+    justify-items: center;
+  }
+  .controls-container { max-width: 640px; width: 100%; }
+
+  .machine-container { width: 98vw; max-width: 720px; }
+
+  /* Adjust reel alignment slightly for the responsive image size */
+  .reel { height: 33%; top: 34.5%; }
+  .reel-1 { left: 21.5%; }
+  .reel-2 { left: 39.1%; }
+  .reel-3 { left: 56.7%; }
+}
+
+/* Top bar */
+.slot-topbar {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  background: rgba(0,0,0,0.75);
+  border: 2px solid #ff1493;
+  padding: 8px 12px;
+  box-shadow: 0 0 15px rgba(255, 20, 147, 0.35);
+}
+
+.slot-topbar-inner {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.slot-balance { color: #fff; font-size: 12px; }
+.slot-balance .coins { color: #ffb6e6; font-weight: 900; }
+
+.slot-unclaimed { color: #fff; font-size: 12px; }
+.slot-unclaimed .coins { color: #ffd166; font-weight: 900; }
+
+.slot-claim-btn {
+  background: linear-gradient(45deg, #32cd32, #7cff7c);
+  color: #022; 
+  border: 2px solid #7cff7c;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.slot-claim-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Rules */
+.rules-btn {
+  width: 100%;
+  background: rgba(0,0,0,0.85);
+  border: 2px solid #ffb6e6;
+  color: #ffb6e6;
+  padding: 8px 6px;
+  cursor: pointer;
+}
+.rules-btn:hover { background: rgba(255, 182, 230, 0.12); }
+
+.rules-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+}
+
+.rules-modal {
+  background: rgba(0,0,0,0.95);
+  border: 3px solid #ffd166;
+  width: 92%;
+  max-width: 520px;
+  padding: 22px;
+  text-align: left;
+  box-shadow: 0 0 30px rgba(255, 209, 102, 0.3);
+}
+
+.rules-title {
+  color: #ffd166;
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.rules-body { color: #fff; }
+.rules-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+}
+.rules-list li {
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+.rules-list li::before {
+  content: '❖';
+  position: absolute;
+  left: 0;
+  color: #ffd166;
+}
+
+.rules-close {
+  display: block;
+  margin: 0 auto;
+  background: linear-gradient(45deg, #ffd166, #ffe08a);
+  color: #2a1f00;
+  border: 2px solid #ffe08a;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+ 

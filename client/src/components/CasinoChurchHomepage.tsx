@@ -1,47 +1,140 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "../hooks/use-is-mobile";
+import { useAudio } from "../lib/stores/useAudio";
+import { useWallet } from "@solana/wallet-adapter-react";
+import WalletConnectButton from "./WalletConnectButton";
+import WalletModal from "./WalletModal";
+import StoryModal from "./StoryModal";
 
 const CasinoChurchHomepage: React.FC = () => {
+  const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [hoveredSide, setHoveredSide] = useState<'casino' | 'church' | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isAudioInitialized, setIsAudioInitialized] = useState(false);
+  const [showWalletModal, setShowWalletModal] = useState(false);
+  const [showStoryModal, setShowStoryModal] = useState(false);
+  const { publicKey } = useWallet();
+  const { 
+    backgroundMusic, 
+    hitSound, 
+    successSound, 
+    isMuted,
+    isMusicPlaying,
+    setBackgroundMusic, 
+    setHitSound, 
+    setSuccessSound,
+    playHit,
+    playSuccess,
+    toggleMute,
+    startBackgroundMusic
+  } = useAudio();
 
+  // Initialize audio on component mount
   useEffect(() => {
-    // Initialize audio for button interactions
-    audioRef.current = new Audio('/sounds/hit.mp3');
-    audioRef.current.volume = 0.3;
+    if (!isAudioInitialized) {
+      // Initialize background music
+      const bgMusic = new Audio('/sounds/background.mp3');
+      bgMusic.loop = true;
+      bgMusic.volume = 0.4;
+      bgMusic.preload = 'auto';
+      setBackgroundMusic(bgMusic);
+
+      // Initialize sound effects
+      const hitAudio = new Audio('/sounds/hit.mp3');
+      hitAudio.volume = 0.3;
+      hitAudio.preload = 'auto';
+      setHitSound(hitAudio);
+
+      const successAudio = new Audio('/sounds/success.mp3');
+      successAudio.volume = 0.4;
+      successAudio.preload = 'auto';
+      setSuccessSound(successAudio);
+
+      setIsAudioInitialized(true);
+    }
+  }, [isAudioInitialized, setBackgroundMusic, setHitSound, setSuccessSound]);
+
+  // Start background music immediately when audio is initialized
+  useEffect(() => {
+    if (isAudioInitialized && !isMuted) {
+      // Try to start background music with autoplay handling
+      const startMusic = async () => {
+        try {
+          await startBackgroundMusic();
+        } catch (error) {
+          console.log("Autoplay prevented, waiting for user interaction");
+          // Set up a one-time click listener to start music
+          const handleFirstClick = () => {
+            startBackgroundMusic();
+            document.removeEventListener('click', handleFirstClick);
+            document.removeEventListener('touchstart', handleFirstClick);
+          };
+          document.addEventListener('click', handleFirstClick);
+          document.addEventListener('touchstart', handleFirstClick);
+        }
+      };
+      
+      startMusic();
+    }
+  }, [isAudioInitialized, isMuted, startBackgroundMusic]);
+
+  // Check if this is the first visit and show story modal
+  useEffect(() => {
+    const hasVisited = localStorage.getItem('casino-church-visited');
+    if (!hasVisited) {
+      setShowStoryModal(true);
+      localStorage.setItem('casino-church-visited', 'true');
+    }
   }, []);
 
   const playHoverSound = () => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(() => {
-        // Audio play prevented - user hasn't interacted yet
-      });
+    playHit();
+  };
+
+  // Handle first user interaction to start audio
+  const handleFirstInteraction = () => {
+    if (isAudioInitialized && !isMuted) {
+      startBackgroundMusic();
     }
   };
 
   const handleEnterCasino = () => {
+    if (!publicKey) {
+      setShowWalletModal(true);
+      return;
+    }
+    playSuccess();
     console.log("Entering Casino...");
-    // TODO: Navigate to casino game
+    navigate('/casino');
   };
 
   const handleEnterChurch = () => {
+    if (!publicKey) {
+      setShowWalletModal(true);
+      return;
+    }
+    playSuccess();
     console.log("Entering Church...");
-    // TODO: Navigate to church game
+    navigate('/church');
   };
 
   return (
-    <div className={`homepage-container ${isMobile ? 'mobile' : 'desktop'}`}>
+    <div 
+      className={`homepage-container ${isMobile ? 'mobile' : 'desktop'}`}
+      onClick={handleFirstInteraction}
+      onTouchStart={handleFirstInteraction}
+    >
+      {/* Background Image */}
+      <div className="background-image">
+        <img src="/scenes/home_scene.png" alt="Casino & Church Scene" />
+      </div>
+
       {/* Game Title */}
       <div className="game-title">
-        <h1 className="pixel-title">THE CASINO & THE CHURCH</h1>
-        <div className="balance-meter">
-          <span className="balance-icon">⚖️</span>
-          <div className="balance-bar">
-            <div className="balance-fill"></div>
-          </div>
-        </div>
+        <h1 className="pixel-title">
+          <span className="title-part">THE</span>
+        </h1>
       </div>
 
       {/* Split Screen Layout */}
@@ -55,53 +148,21 @@ const CasinoChurchHomepage: React.FC = () => {
           }}
           onMouseLeave={() => setHoveredSide(null)}
         >
-          <div className="casino-background">
-            {/* Dark atmospheric fog */}
-            <div className="casino-fog">
-              <div className="fog-layer fog-1"></div>
-              <div className="fog-layer fog-2"></div>
-              <div className="fog-layer fog-3"></div>
-            </div>
-            
-            <div className="neon-signs">
-              <div className="neon-sign neon-purple">$$$</div>
-              <div className="neon-sign neon-gold">JACKPOT</div>
-              <div className="neon-sign neon-pink">🎰</div>
-            </div>
-            <div className="slot-machines">
-              <div className="slot-machine slot-1"></div>
-              <div className="slot-machine slot-2"></div>
-            </div>
-            <div className="dancing-lights">
-              <div className="light light-1"></div>
-              <div className="light light-2"></div>
-              <div className="light light-3"></div>
-              <div className="light light-4"></div>
-            </div>
-            <div className="meme-posters">
-              <div className="poster poster-1">🚀</div>
-              <div className="poster poster-2">💎</div>
-              <div className="poster poster-3">🦍</div>
-            </div>
-            
-            {/* Dark smoke effects */}
-            <div className="smoke-effects">
-              <div className="smoke smoke-1"></div>
-              <div className="smoke smoke-2"></div>
-              <div className="smoke smoke-3"></div>
-            </div>
+          {/* Casino Title */}
+          <div className="side-title casino-title">
+            <h2>CASINO</h2>
           </div>
 
           <div className="side-content">
             <div className="avatar-container">
               <div className="casino-avatar">
                 <div className="avatar-body">
-                  <div className="avatar-head">😎</div>
-                  <div className="avatar-outfit">
+                  {/* <div className="avatar-outfit">
                     <div className="flashy-jacket"></div>
                     <div className="gold-chain"></div>
-                  </div>
+                  </div> */}
                   <div className="sol-tokens">
+                    <span className="token">◎</span>
                     <span className="token">◎</span>
                     <span className="token">◎</span>
                     <span className="token">◎</span>
@@ -109,21 +170,28 @@ const CasinoChurchHomepage: React.FC = () => {
                 </div>
               </div>
             </div>
+          </div>
 
+          {/* Casino Button - Positioned Lower */}
+          <div className="button-container casino-button-container">
             <button 
               className="enter-button casino-button"
               onClick={handleEnterCasino}
               onMouseEnter={playHoverSound}
             >
               <span className="button-icon">🎰</span>
-              <span className="button-text">Enter Casino</span>
-              <div className="button-glow"></div>
+              <span className="button-text">ENTER CASINO</span>
             </button>
 
             <div className="tooltip casino-tooltip">
-              "Speculate. Win. Repeat."
+              "SPECULATE. WIN. REPEAT."
             </div>
           </div>
+        </div>
+
+        {/* Center Intersection */}
+        <div className="center-intersection">
+          <div className="intersection-symbol">&</div>
         </div>
 
         {/* Church Side */}
@@ -135,50 +203,18 @@ const CasinoChurchHomepage: React.FC = () => {
           }}
           onMouseLeave={() => setHoveredSide(null)}
         >
-          <div className="church-background">
-            {/* Mystical darkness and shadows */}
-            <div className="church-shadows">
-              <div className="shadow-layer shadow-1"></div>
-              <div className="shadow-layer shadow-2"></div>
-              <div className="shadow-layer shadow-3"></div>
-            </div>
-            
-            <div className="stained-glass">
-              <div className="glass-panel panel-1"></div>
-              <div className="glass-panel panel-2"></div>
-              <div className="glass-panel panel-3"></div>
-            </div>
-            <div className="floating-scrolls">
-              <div className="scroll scroll-1">📜</div>
-              <div className="scroll scroll-2">📋</div>
-            </div>
-            <div className="pulpit">
-              <div className="candle candle-1">🕯️</div>
-              <div className="candle candle-2">🕯️</div>
-              <div className="candle candle-3">🕯️</div>
-            </div>
-            <div className="holy-symbols">
-              <div className="symbol symbol-1">✨</div>
-              <div className="symbol symbol-2">🙏</div>
-              <div className="symbol symbol-3">⭐</div>
-            </div>
-            
-            {/* Ethereal mist effects */}
-            <div className="ethereal-mist">
-              <div className="mist mist-1"></div>
-              <div className="mist mist-2"></div>
-              <div className="mist mist-3"></div>
-            </div>
+          {/* Church Title */}
+          <div className="side-title church-title">
+            <h2>CHURCH</h2>
           </div>
 
           <div className="side-content">
             <div className="avatar-container">
               <div className="church-avatar">
                 <div className="avatar-body">
-                  <div className="avatar-head">😇</div>
                   <div className="avatar-robes">
-                    <div className="digital-robe"></div>
-                    <div className="holy-hood"></div>
+                    {/* <div className="digital-robe"></div>
+                    <div className="holy-hood"></div> */}
                   </div>
                   <div className="glowing-ledger">
                     <div className="ledger">📖</div>
@@ -187,19 +223,21 @@ const CasinoChurchHomepage: React.FC = () => {
                 </div>
               </div>
             </div>
+          </div>
 
+          {/* Church Button - Positioned Lower */}
+          <div className="button-container church-button-container">
             <button 
               className="enter-button church-button"
               onClick={handleEnterChurch}
               onMouseEnter={playHoverSound}
             >
               <span className="button-icon">⛪</span>
-              <span className="button-text">Enter Church</span>
-              <div className="button-glow"></div>
+              <span className="button-text">ENTER CHURCH</span>
             </button>
 
             <div className="tooltip church-tooltip">
-              "Preach. Build. Believe."
+              "PREACH. BUILD. BELIEVE."
             </div>
           </div>
         </div>
@@ -212,10 +250,43 @@ const CasinoChurchHomepage: React.FC = () => {
           <span className="solana-logo">◎ Solana</span>
         </div>
         <div className="honeycomb-badge">
-          <span className="badge-text">Powered by</span>
-          <span className="honeycomb-logo">🐝 Honeycomb Protocol</span>
+          <span className="badge-text">POWERED BY</span>
+          <span className="honeycomb-logo">🐝 HONEYCOMB PROTOCOL</span>
         </div>
       </div>
+
+      {/* Audio Control */}
+      <button 
+        className="audio-control"
+        onClick={toggleMute}
+        title={isMuted ? "Unmute" : "Mute"}
+      >
+        {isMuted ? "🔇" : "🔊"}
+      </button>
+
+      {/* Wallet Connect Button */}
+      <div className="wallet-control">
+        <WalletConnectButton />
+      </div>
+
+      {/* Wallet Modal */}
+      <WalletModal 
+        isOpen={showWalletModal} 
+        onClose={() => setShowWalletModal(false)} 
+      />
+
+      {/* Story Modal */}
+      <StoryModal 
+        isOpen={showStoryModal} 
+        onClose={() => setShowStoryModal(false)} 
+      />
+
+      {/* Audio Ready Indicator */}
+      {isAudioInitialized && !isMusicPlaying && !isMuted && (
+        <div className="audio-ready-indicator">
+          <span>Click anywhere to start music</span>
+        </div>
+      )}
     </div>
   );
 };

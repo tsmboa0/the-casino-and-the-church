@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { WalletProvider } from "./lib/wallet/WalletProvider";
 import CasinoChurchHomepage from "./components/CasinoChurchHomepage";
-import "@fontsource/inter";
+import CasinoRealm from "./components/CasinoRealm";
+import ChurchRealm from "./components/ChurchRealm";
+import WriteSermons from "./components/church/WriteSermons";
+import ProphecyQuests from "./components/church/ProphecyQuests";
+import SlotMachine from "./components/games/SlotMachine";
+import MemecoinSimulator from "./components/games/MemecoinSimulator";
 import "./styles/homepage.css";
+import "./styles/wallet.css";
 
 function App() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -21,9 +29,22 @@ function App() {
   }
 
   return (
-    <div className="app-container">
-      <CasinoChurchHomepage />
-    </div>
+    <WalletProvider>
+      <Router>
+        <div className="app-container">
+          <Routes>
+            <Route path="/" element={<CasinoChurchHomepage />} />
+            <Route path="/casino" element={<CasinoRealm />} />
+            <Route path="/casino/slots" element={<SlotMachine />} />
+            <Route path="/casino/memecoin" element={<MemecoinSimulator />} />
+            <Route path="/church" element={<ChurchRealm />} />
+            <Route path="/church/sermons" element={<WriteSermons />} />
+            <Route path="/church/quests" element={<ProphecyQuests />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
+      </Router>
+    </WalletProvider>
   );
 }
 
