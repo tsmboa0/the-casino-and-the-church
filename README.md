@@ -1,3 +1,7 @@
+### Link to Demo Video : https://youtu.be/aStt6upM6bY
+
+### Link to Live App: 
+
 # 🎰✝️ The Casino and The Church  
 
 *A 2D pixel-style web game exploring the paradox of crypto and Web3.*  
@@ -6,7 +10,8 @@
 
 ## 📖 Backstory  
 
-Most believe crypto is one thing. They are wrong.  
+Most believe crypto is one thing. They are wrong.
+
 It is two.  
 
 On one side lies **The Casino** — flashing lights, spinning wheels, memecoin madness. Fortunes made, fortunes lost. A place where hope is pumped like oxygen, where laughter echoes alongside the sound of collapsing dreams. It is exhilarating, unpredictable, intoxicating.  
