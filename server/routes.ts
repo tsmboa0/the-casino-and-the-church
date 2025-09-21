@@ -3,22 +3,22 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertUserSchema } from "@shared/schema";
 import { z } from "zod";
-import { HoneycombService } from "./modules/honeycomb/honeycomb.service";
+// import { HoneycombService } from "./modules/honeycomb/honeycomb.service";
 
 export async function registerRoutes(app: Express): Promise<Server> {
 
-  app.get("/api/initialize", async (req, res) => {
-    try {
-      const honeycombService = new HoneycombService();
-      console.log("Creating profile tree");
-      await honeycombService.createProfileTree();
-      console.log("Profile tree created");
-      res.json({ message: "Project created" });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  });
+  // app.get("/api/initialize", async (req, res) => {
+  //   try {
+  //     const honeycombService = new HoneycombService();
+  //     console.log("Creating profile tree");
+  //     await honeycombService.createProfileTree();
+  //     console.log("Profile tree created");
+  //     res.json({ message: "Project created" });
+  //   } catch (error) {
+  //     console.log(error);
+  //     res.status(500).json({ error: "Internal server error" });
+  //   }
+  // });
 
   // User Management Routes
   app.post("/api/users", async (req, res) => {
