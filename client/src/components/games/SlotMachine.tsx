@@ -280,7 +280,7 @@ const SlotMachine: React.FC = () => {
                 setWonAmount(payout);
                 setUnclaimed(prev => {
                   const total = prev + payout;
-                  setResultText(`You won ${payout} chips! Unclaimed total: ${total}. Tap CASHOUT to add to balance.`);
+                  setResultText(`You won ${payout} $CNC! Unclaimed total: ${total} $CNC. Tap CASHOUT to add to balance.`);
                   return total;
                 });
                 // Increase luck when winning
@@ -317,7 +317,7 @@ const SlotMachine: React.FC = () => {
       const claimed = unclaimed;
       setUnclaimed(0);
       setWonAmount(claimed);
-      setResultText(`Claimed ${claimed} chips! Added to your balance.`);
+      setResultText(`Claimed ${claimed} $CNC! Added to your balance. ${casinoBalance.toFixed(2)} $CNC.`);
       setShowResultModal(true);
     } else {
       setWonAmount(0);
@@ -337,8 +337,8 @@ const SlotMachine: React.FC = () => {
       {/* Top bar with balance & claim */}
       <div className="slot-topbar">
         <div className="slot-topbar-inner">
-          <div className="slot-balance">💰 Balance: <span className="coins">{casinoBalance.toFixed(2)}</span></div>
-          <div className="slot-unclaimed">🏆 Unclaimed: <span className="coins">{unclaimed.toFixed(2)}</span></div>
+          <div className="slot-balance">💰 Balance: <span className="coins">{casinoBalance.toFixed(2)} $CNC</span></div>
+          <div className="slot-unclaimed">🏆 Unclaimed: <span className="coins">{unclaimed.toFixed(2)} $CNC</span></div>
 
         </div>
       </div>

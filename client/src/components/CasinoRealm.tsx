@@ -153,7 +153,7 @@ const CasinoRealm: React.FC = () => {
           <div className="luck-progress-text">LUCK</div>
         </div>
         <div className="luck-value">{luckProgress.toFixed(2)}%</div>
-        <div className="casino-balance">💰 {casinoBalance.toFixed(2)}</div>
+        <div className="casino-balance">💰 {casinoBalance.toFixed(2)} $CNC</div>
       </div>
 
       {/* Back Button */}

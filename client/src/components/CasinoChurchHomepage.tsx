@@ -83,8 +83,10 @@ const CasinoChurchHomepage: React.FC = () => {
   useEffect(() => {
     const hasVisited = localStorage.getItem('casino-church-visited');
     if (!hasVisited) {
-      setShowStoryModal(true);
-      localStorage.setItem('casino-church-visited', 'true');
+      setTimeout(() => {
+        setShowStoryModal(true);
+        localStorage.setItem('casino-church-visited', 'true');
+      }, 3000);
     }
   }, []);
 
@@ -253,6 +255,14 @@ const CasinoChurchHomepage: React.FC = () => {
           <span className="badge-text">POWERED BY</span>
           <span className="honeycomb-logo">🐝 HONEYCOMB PROTOCOL</span>
         </div>
+        <button 
+          className="story-button"
+          onClick={() => setShowStoryModal(true)}
+          title="Read the Game Story"
+        >
+          <span className="">READ BACKSTORY</span>
+          <span className="">📖</span>
+        </button>
       </div>
 
       {/* Audio Control */}
@@ -263,6 +273,7 @@ const CasinoChurchHomepage: React.FC = () => {
       >
         {isMuted ? "🔇" : "🔊"}
       </button>
+
 
       {/* Wallet Connect Button */}
       <div className="wallet-control">

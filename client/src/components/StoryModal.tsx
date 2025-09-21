@@ -13,9 +13,7 @@ const StoryModal: React.FC<StoryModalProps> = ({ isOpen, onClose }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [displayedText, setDisplayedText] = useState("");
 
-  const storyText = `🌌 The Casino and The Church 🌌
-
-(A Tale of Crypto in Two Realms)
+  const storyText = `🌌 The Casino and The Church 🌌 : A Tale of Crypto in Two Realms
 
 Most believe crypto is one thing. They are wrong.
 It is two.
@@ -45,11 +43,16 @@ Together, they decide your fate.
 So choose wisely, traveler.
 Will you gamble with the Gambler?
 Or pray with the Priest?
-Perhaps both—because only those who master both sides of the coin can truly understand the world of crypto.
+Perhaps both —because only those who master both sides of the coin can truly understand the world of crypto.
+
+Your Mission is to achieve balance between the two realms. You will earn multipliers for achieving balance.
+For example, you can earn a multiplier of 2x on the total $CNC tokens you've spent in the Casino and the Church.
 
 Welcome to The Casino and The Church.
 
-Enjoy the spectacles while you pray for the miracles`;
+Enjoy the spectacles while you pray for the miracles.
+
+Click the "Read Backstory" button to read this story again.`;
 
   const storyParts = storyText.split('\n\n');
 

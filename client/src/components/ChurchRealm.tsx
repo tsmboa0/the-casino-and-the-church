@@ -158,7 +158,7 @@ const ChurchRealm: React.FC = () => {
           <div className="faith-progress-text">FAITH</div>
         </div>
         <div className="faith-value">{faithProgress.toFixed(2)}%</div>
-        <div className="casino-balance">🎰 {casinoBalance.toFixed(2)}</div>
+        <div className="casino-balance">🎰 {casinoBalance.toFixed(2)} $CNC</div>
       </div>
 
       {/* Back Button */}
