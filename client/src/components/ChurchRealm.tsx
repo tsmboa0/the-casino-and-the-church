@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "../hooks/use-is-mobile";
 import { useAudio } from "../lib/stores/useAudio";
 import { useProgress } from "../lib/stores/useProgress";
+import { useSolBalance } from "../hooks/useSolBalance";
 import "../styles/church-realm.css";
+import FlipBook, { FlipPage } from "./church/FlipBook";
 
 const ChurchRealm: React.FC = () => {
   const navigate = useNavigate();
@@ -14,13 +16,12 @@ const ChurchRealm: React.FC = () => {
   
   // Progress system integration
   const { 
-    faithProgress, 
-    casinoBalance,
+    faithProgress,
     updateFaithProgress,
-    updateCasinoBalance,
     setLastChurchTime, 
     applyCrossRealmDecay 
   } = useProgress();
+  const { balance: solBalance } = useSolBalance();
   
   const { 
     backgroundMusic, 
@@ -118,12 +119,14 @@ const ChurchRealm: React.FC = () => {
     }, 1500);
   };
 
-  const activities = [
-    { id: 'write-sermons', name: 'Write Sermons', emoji: '📖', description: 'Share wisdom and build belief' },
-    { id: 'dao-voting', name: 'DAO Voting', emoji: '🗳️', description: 'Participate in governance decisions' },
-    { id: 'prophecy-quests', name: 'Prophecy Quests', emoji: '🔮', description: 'Complete sacred missions' },
-    { id: 'doctrine-builder', name: 'Doctrine Builder', emoji: '⚖️', description: 'Craft the rules of faith' }
-  ];
+  const pages: FlipPage[] = useMemo(() => ([
+    { id: 'jupiter', title: 'Jupiter Liquidity Quest', subtitle: 'Route the best swaps', art: '/brands/jupiter.jpg', route: '/church/quests/jupiter' },
+    { id: 'kamino', title: 'Kamino Vault Steward', subtitle: 'Optimize risk-adjusted yield', art: '/brands/kamino.png', route: '/church/quests/kamino' },
+    { id: 'pumpfun', title: 'Pump.fun Evangelism', subtitle: 'Spread the word of memes', art: '/brands/pumpfun.jpeg', route: '/church/quests/pumpfun' },
+    { id: 'arcium', title: 'Arcium Data Pilgrim', subtitle: 'Index and reveal insights', art: '/brands/arcium.jpg', route: '/church/quests/arcium' },
+    { id: 'write-sermons', title: 'Write Sermons', subtitle: 'Share wisdom and build belief', art: '/avatars/priest.png', route: '/church/sermons' },
+    { id: 'prophecy-quests', title: 'Prophecy Quests', subtitle: 'Complete sacred missions', art: '/public/assets/brands/arcium.jpg', comingSoon: true },
+  ]), []);
 
   if (isTransitioning) {
     return (
@@ -158,7 +161,7 @@ const ChurchRealm: React.FC = () => {
           <div className="faith-progress-text">FAITH</div>
         </div>
         <div className="faith-value">{faithProgress.toFixed(2)}%</div>
-        <div className="casino-balance">🎰 {casinoBalance.toFixed(2)} $CNC</div>
+        <div className="casino-balance">🎰 {(solBalance ?? 0).toFixed(4)} SOL</div>
       </div>
 
       {/* Back Button */}
@@ -181,23 +184,20 @@ const ChurchRealm: React.FC = () => {
           <div className="priest-glow"></div>
         </div>
 
-        {/* Activity Selection */}
-        <div className="activities-container">
-          <h2 className="activities-title">CHOOSE YOUR PATH</h2>
-          <div className="activities-grid">
-            {activities.map((activity) => (
-              <button
-                key={activity.id}
-                className="activity-button"
-                onClick={() => handleActivitySelect(activity.id)}
-                onMouseEnter={playHoverSound}
-              >
-                <div className="activity-emoji">{activity.emoji}</div>
-                <div className="activity-name">{activity.name}</div>
-                <div className="activity-description">{activity.description}</div>
-              </button>
-            ))}
-          </div>
+        {/* Flip Book Selection */}
+        <div className="activities-container" style={{ background: 'rgba(0,0,0,0.65)' }}>
+          <h2 className="activities-title">CHOOSE YOUR SCRIPTURE</h2>
+          <FlipBook
+            pages={pages}
+            onSelect={(page) => {
+              if (page.comingSoon || !page.route) {
+                playHit();
+                alert('Coming Soon');
+                return;
+              }
+              navigate(page.route);
+            }}
+          />
         </div>
       </div>
 

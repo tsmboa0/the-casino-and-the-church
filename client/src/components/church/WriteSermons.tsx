@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "../../hooks/use-is-mobile";
 import { useAudio } from "../../lib/stores/useAudio";
 import { useProgress } from "../../lib/stores/useProgress";
+import { useSolBalance } from "../../hooks/useSolBalance";
 import "../../styles/write-sermons.css";
 
 interface SermonTopic {
@@ -86,6 +87,7 @@ const WriteSermons: React.FC = () => {
   const isMobile = useIsMobile();
   const { playHit, playSuccess } = useAudio();
   const { casinoBalance, updateCasinoBalance, updateFaithProgress } = useProgress();
+  const { balance: cncBalance } = useSolBalance();
 
   const [selectedTopic, setSelectedTopic] = useState<SermonTopic | null>(null);
   const [articleLink, setArticleLink] = useState("");
@@ -114,7 +116,7 @@ const WriteSermons: React.FC = () => {
       return;
     }
 
-    if (casinoBalance < selectedTopic.cost) {
+    if ((cncBalance ?? casinoBalance) < selectedTopic.cost) {
       alert("You don't have enough coins to submit this sermon. Visit the casino to earn more coins!");
       return;
     }
@@ -167,7 +169,7 @@ const WriteSermons: React.FC = () => {
         <h1 className="page-title">📖 Write Sermons</h1>
         <div className="balance-display">
           <span className="balance-label">Coins:</span>
-          <span className="balance-value">🎰 {casinoBalance.toFixed(2)}</span>
+          <span className="balance-value">🎰 {(cncBalance ?? casinoBalance).toFixed(2)}</span>
         </div>
       </div>
 
@@ -234,7 +236,7 @@ const WriteSermons: React.FC = () => {
                 <button
                   className="submit-button"
                   onClick={handleSubmitSermon}
-                  disabled={!articleLink.trim() || casinoBalance < selectedTopic.cost}
+                  disabled={!articleLink.trim() || (cncBalance ?? casinoBalance) < selectedTopic.cost}
                 >
                   Submit Sermon
                 </button>

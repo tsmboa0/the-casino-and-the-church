@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "../../hooks/use-is-mobile";
 import { useAudio } from "../../lib/stores/useAudio";
 import { useProgress } from "../../lib/stores/useProgress";
+import { useSolBalance } from "../../hooks/useSolBalance";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { PublicKey } from "@solana/web3.js";
+import { requestSolTransferToRecipient } from "../../lib/wallet/sol";
 import "../../styles/slot-machine.css";
 
 const symbols = ["🔔", "🥭", "🌽", "🍏", "🍅", "🍌"];
@@ -45,10 +49,11 @@ const SlotMachine: React.FC = () => {
   
   // Progress system integration
   const { 
-    casinoBalance, 
-    updateCasinoBalance, 
     updateLuckProgress 
   } = useProgress();
+  const { balance: solBalance } = useSolBalance();
+  const { connection } = useConnection();
+  const wallet = useWallet();
 
   const [spinAudio] = useState(() => new Audio('/sounds/spinning_slot_machine.wav'));
   const [winAudio] = useState(() => new Audio('/sounds/casino_win_sound.wav'));
@@ -69,8 +74,9 @@ const SlotMachine: React.FC = () => {
     };
   }, [stopBackgroundMusic, spinAudio]);
 
-  const [bet, setBet] = useState<number>(50);
+  const [bet, setBet] = useState<number>(0.01);
   const [unclaimed, setUnclaimed] = useState<number>(0);
+  const [errorMsg, setErrorMsg] = useState<string>("");
   const [reels, setReels] = useState<ReelState[]>([
     { ...initialReel },
     { ...initialReel },
@@ -227,13 +233,43 @@ const SlotMachine: React.FC = () => {
 
   const handlePlay = async () => {
     if (isPlaying) return;
-    if (bet <= 0 || bet > casinoBalance) return;
+    const current = solBalance ?? 0;
+    if (!solBalance || current <= 0) {
+      setResultText("Insufficient SOL. Deposit SOL to play.");
+      setWonAmount(0);
+      setShowResultModal(true);
+      return;
+    }
+    if (bet <= 0) {
+      setResultText("Bet must be greater than 0.");
+      setWonAmount(0);
+      setShowResultModal(true);
+      return;
+    }
+    if (bet > current) {
+      setResultText("Bet exceeds your SOL balance.");
+      setWonAmount(0);
+      setShowResultModal(true);
+      return;
+    }
+
+    // Send SOL bet to house address
+    try {
+      const house = new PublicKey("ATMeXPi4txKPXgCZHy2r3mUM7aVXgm6LR8MSN2U3mGEy");
+      if (wallet.publicKey && wallet.signTransaction) {
+        await requestSolTransferToRecipient({ connection, wallet: wallet as any, recipient: house, solAmount: bet, actuallySend: true });
+      }
+    } catch (e) {
+      setResultText("Transaction failed or was rejected.");
+      setWonAmount(0);
+      setShowResultModal(true);
+      return;
+    }
 
     setIsPlaying(true);
     setResultText("");
     setWonAmount(0);
     setShowResultModal(false);
-    updateCasinoBalance(-bet);
 
     playHit();
     try {
@@ -307,17 +343,18 @@ const SlotMachine: React.FC = () => {
 
   const setBetByPercent = (pct: number) => {
     playHit();
-    setBet(Math.max(1, Math.floor((casinoBalance * pct) / 100)));
+    const current = solBalance ?? 0;
+    const next = (current * pct) / 100;
+    setBet(Number(Math.max(0.01, next).toFixed(4)));
   };
 
   const handleCashout = () => {
     playHit();
     if (unclaimed > 0) {
-      updateCasinoBalance(unclaimed);
       const claimed = unclaimed;
       setUnclaimed(0);
       setWonAmount(claimed);
-      setResultText(`Claimed ${claimed} $CNC! Added to your balance. ${casinoBalance.toFixed(2)} $CNC.`);
+      setResultText(`Claimed ${claimed} SOL! (Demo) This does not affect on-chain balance yet.`);
       setShowResultModal(true);
     } else {
       setWonAmount(0);
@@ -325,6 +362,17 @@ const SlotMachine: React.FC = () => {
       setShowResultModal(true);
     }
   };
+
+  const currentBalance = solBalance ?? 0;
+  const playDisabled = isPlaying || currentBalance <= 0 || bet > currentBalance || bet < 0.01;
+  const playDisabledReason =
+    currentBalance <= 0
+      ? 'Insufficient SOL. Deposit SOL to play.'
+      : bet > currentBalance
+        ? 'Bet exceeds your SOL balance.'
+        : bet < 0.01
+          ? 'Minimum bet is 0.01 SOL.'
+          : '';
 
   return (
     <div className={`slot-machine-page ${isMobile ? 'mobile' : 'desktop'}`}>
@@ -337,8 +385,8 @@ const SlotMachine: React.FC = () => {
       {/* Top bar with balance & claim */}
       <div className="slot-topbar">
         <div className="slot-topbar-inner">
-          <div className="slot-balance">💰 Balance: <span className="coins">{casinoBalance.toFixed(2)} $CNC</span></div>
-          <div className="slot-unclaimed">🏆 Unclaimed: <span className="coins">{unclaimed.toFixed(2)} $CNC</span></div>
+          <div className="slot-balance">💰 Balance: <span className="coins">{(solBalance ?? 0).toFixed(4)} SOL</span></div>
+          <div className="slot-unclaimed">🏆 Unclaimed: <span className="coins">{unclaimed.toFixed(4)} SOL</span></div>
 
         </div>
       </div>
@@ -374,7 +422,31 @@ const SlotMachine: React.FC = () => {
         <div className="controls-container">
           <div className="panel">
             <div className="stats">
-              <div className="stat"><span className="label">Bet</span><span className="value">{bet}</span></div>
+              <div className="stat">
+                <span className="label">Bet</span>
+                <input
+                  type="number"
+                  className="bet-input"
+                  value={bet}
+                  style={{backgroundColor: 'transparent', width: '70%', height: '50%', color: 'white'}}
+                  min={0.01}
+                  max={Math.max(0.01, currentBalance)}
+                  onChange={(e) => {
+                    const raw = parseFloat(e.target.value || '0');
+                    if (Number.isNaN(raw)) {
+                      setBet(0.01);
+                      return;
+                    }
+                    const clamped = Math.min(
+                      Math.max(0.01, raw),
+                      Math.max(0.01, currentBalance)
+                    );
+                    setBet(Number(clamped.toFixed(4)));
+                  }}
+                  disabled={isPlaying}
+                  title="Enter custom bet amount"
+                />
+              </div>
               <div className="stat"><span className="label">Status</span><span className="value">{isPlaying ? 'Spinning…' : 'Ready'}</span></div>
               <div className="stat">
                 <button className="rules-btn" onClick={() => { playHit(); setShowRulesModal(true); }}>📜 Rules</button>
@@ -391,7 +463,14 @@ const SlotMachine: React.FC = () => {
             </div>
 
             <div className="action-row">
-              <button className="play-btn" onClick={handlePlay} disabled={isPlaying || bet > casinoBalance}>PLAY</button>
+              <button
+                className="play-btn"
+                onClick={handlePlay}
+                disabled={playDisabled}
+                title={playDisabled ? playDisabledReason : 'Play the slot machine'}
+              >
+                PLAY
+              </button>
               <button className="cashout-btn" onClick={handleCashout} disabled={isPlaying}>CASHOUT</button>
             </div>
           </div>

@@ -251,10 +251,6 @@ const CasinoChurchHomepage: React.FC = () => {
           <span className="badge-text">Built on</span>
           <span className="solana-logo">◎ Solana</span>
         </div>
-        <div className="honeycomb-badge">
-          <span className="badge-text">POWERED BY</span>
-          <span className="honeycomb-logo">🐝 HONEYCOMB PROTOCOL</span>
-        </div>
         <button 
           className="story-button"
           onClick={() => setShowStoryModal(true)}

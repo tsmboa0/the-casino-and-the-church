@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "../hooks/use-is-mobile";
 import { useAudio } from "../lib/stores/useAudio";
 import { useProgress } from "../lib/stores/useProgress";
 import "../styles/casino-realm.css";
+import { useConnection } from "@solana/wallet-adapter-react";
+import { useSolBalance } from "../hooks/useSolBalance";
 
 const CasinoRealm: React.FC = () => {
   const navigate = useNavigate();
@@ -11,14 +13,19 @@ const CasinoRealm: React.FC = () => {
   const [isTransitioning, setIsTransitioning] = useState(true);
   const [isGoingBack, setIsGoingBack] = useState(false);
   const [casinoMusic, setCasinoMusic] = useState<HTMLAudioElement | null>(null);
+  const [showComingSoon, setShowComingSoon] = useState(false);
+  const [selectedTitle, setSelectedTitle] = useState<string>("");
   
   // Progress system integration
   const { 
     luckProgress, 
-    casinoBalance,
     setLastCasinoTime, 
     applyCrossRealmDecay 
   } = useProgress();
+
+  // Wallet + CNC balance
+  const { connection } = useConnection();
+  const { balance: solBalance } = useSolBalance();
   
   const { 
     backgroundMusic, 
@@ -85,9 +92,8 @@ const CasinoRealm: React.FC = () => {
     playHit();
   };
 
-  const handleGameSelect = (game: string) => {
+  const handleGameSelect = async (game: string) => {
     playHit();
-    console.log(`Selected game: ${game}`);
     if (game === 'slot-machine') {
       navigate('/casino/slots');
       return;
@@ -96,7 +102,9 @@ const CasinoRealm: React.FC = () => {
       navigate('/casino/memecoin');
       return;
     }
-    // TODO: Navigate to specific game
+    const picked = featuredGames.find(g => g.id === game);
+    setSelectedTitle((picked?.name || game).toUpperCase());
+    setShowComingSoon(true);
   };
 
   const handleBackToHome = () => {
@@ -113,12 +121,31 @@ const CasinoRealm: React.FC = () => {
     }, 1500);
   };
 
-  const games = [
-    { id: 'slot-machine', name: 'Slot Machine', emoji: '🎰', description: 'Pull the lever and test your luck' },
-    { id: 'coin-flip', name: 'Coin Flip', emoji: '🪙', description: 'Heads or tails, 50/50 chance' },
-    { id: 'memecoin-simulator', name: 'Memecoin Simulator', emoji: '🚀', description: 'Ride the pump or crash' },
-    { id: 'rug-pull-roulette', name: 'Rug Pull Roulette', emoji: '🎲', description: 'Spin the wheel of fortune' }
-  ];
+  // Featured six games to render as shuffled cards (with images)
+  const featuredGames = useMemo(() => ([
+    { id: 'slot-machine', name: '777 Slot Machine', image: '/assets/casino_games/slot-image.jpg' },
+    { id: 'memecoin-simulator', name: 'Memecoin Simulator', image: '/assets/casino_games/memecoin-simulator.webp' },
+    { id: 'coin-flip', name: 'Coin Flip', image: '/assets/casino_games/5d0888d10b189f5e2_9078f79a-1c2e-48b3-8833-07f50c9279ca.png' },
+    { id: 'rug-pull-roulette', name: 'Rug Pull Roulette', image: '/assets/casino_games/b78db705fcf8ac48_376f4127-82a8-4fe5-aee0-9faea7017bbf.png' },
+    { id: 'barbarossa', name: 'Barbarossa', image: '/assets/casino_games/104bf8ff8e8cae125_b0f8ac20-2f18-41e4-a507-7c9ac9f1d17a.jpeg' },
+    { id: 'raging-lion', name: 'Raging Lion', image: '/assets/casino_games/432f10db51a752e51_f72c6605-3e1f-4ac0-9ef4-26c295758d36.jpeg' }
+  ]), []);
+
+  const [startIndex, setStartIndex] = useState(0);
+
+  const orderedCards = useMemo(() => {
+    return featuredGames.map((g, i) => featuredGames[(startIndex + i) % featuredGames.length]);
+  }, [featuredGames, startIndex]);
+
+  const swipeLeft = () => {
+    playHit();
+    setStartIndex((prev) => (prev + 1) % featuredGames.length);
+  };
+
+  const swipeRight = () => {
+    playHit();
+    setStartIndex((prev) => (prev - 1 + featuredGames.length) % featuredGames.length);
+  };
 
   if (isTransitioning) {
     return (
@@ -153,7 +180,7 @@ const CasinoRealm: React.FC = () => {
           <div className="luck-progress-text">LUCK</div>
         </div>
         <div className="luck-value">{luckProgress.toFixed(2)}%</div>
-        <div className="casino-balance">💰 {casinoBalance.toFixed(2)} $CNC</div>
+        <div className="casino-balance">💰 {(solBalance ?? 0).toFixed(4)} SOL</div>
       </div>
 
       {/* Back Button */}
@@ -176,23 +203,34 @@ const CasinoRealm: React.FC = () => {
           <div className="gambler-glow"></div>
         </div>
 
-        {/* Game Selection */}
+        {/* Game Selection - Shuffled Cards */}
         <div className="games-container">
           <h2 className="games-title">SELECT YOUR GAME</h2>
-          <div className="games-grid">
-            {games.map((game) => (
+          <div className="shuffled-cards">
+            <button className="deck-control left" onClick={swipeRight} title="Previous">◀</button>
+            <button className="deck-control right" onClick={swipeLeft} title="Next">▶</button>
+            {orderedCards.map((game, index) => (
               <button
                 key={game.id}
-                className="game-button"
+                className={`casino-card card-${index} ${index === 0 ? 'card-active' : ''}`}
                 onClick={() => handleGameSelect(game.id)}
                 onMouseEnter={playHoverSound}
+                title={game.name}
               >
-                <div className="game-emoji">{game.emoji}</div>
-                <div className="game-name">{game.name}</div>
-                <div className="game-description">{game.description}</div>
+                <img src={game.image} alt={game.name} />
+                <div className="card-overlay">
+                  <span className="card-name">{game.name}</span>
+                </div>
               </button>
             ))}
           </div>
+          <button
+            className="load-more-button"
+            onClick={() => navigate('/casino/games')}
+            onMouseEnter={playHoverSound}
+          >
+            LOAD MORE GAMES
+          </button>
         </div>
       </div>
 
@@ -212,6 +250,22 @@ const CasinoRealm: React.FC = () => {
       >
         🔊
       </button>
+      {showComingSoon && (
+        <div className="coming-modal-overlay" role="dialog" aria-modal="true">
+          <div className="coming-modal">
+            <div className="coming-header">
+              <span className="coming-title">COMING SOON</span>
+            </div>
+            <div className="coming-body">
+              <div className="soon-line">{selectedTitle || 'NEW GAME'}</div>
+              <div className="soon-sub">This table is being prepared. Check back shortly!</div>
+            </div>
+            <div className="coming-actions">
+              <button className="pixel-btn" onClick={() => { playHit(); setShowComingSoon(false); }}>OK</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

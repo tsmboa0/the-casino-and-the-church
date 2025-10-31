@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "../../hooks/use-is-mobile";
 import { useAudio } from "../../lib/stores/useAudio";
 import { useProgress } from "../../lib/stores/useProgress";
+import { useSolBalance } from "../../hooks/useSolBalance";
 import "../../styles/prophecy-quests.css";
 
 interface Quest {
@@ -122,6 +123,7 @@ const ProphecyQuests: React.FC = () => {
   const isMobile = useIsMobile();
   const { playHit, playSuccess } = useAudio();
   const { casinoBalance, updateCasinoBalance, updateFaithProgress } = useProgress();
+  const { balance: cncBalance } = useSolBalance();
 
   const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
   const [verificationProof, setVerificationProof] = useState("");
@@ -150,7 +152,7 @@ const ProphecyQuests: React.FC = () => {
       return;
     }
 
-    if (casinoBalance < selectedQuest.cost) {
+    if ((cncBalance ?? casinoBalance) < selectedQuest.cost) {
       alert("You don't have enough coins to verify this quest. Visit the casino to earn more coins!");
       return;
     }
@@ -195,7 +197,7 @@ const ProphecyQuests: React.FC = () => {
         <h1 className="page-title">🔮 Prophecy Quests</h1>
         <div className="balance-display">
           <span className="balance-label">Coins:</span>
-          <span className="balance-value">🎰 {casinoBalance.toFixed(2)}</span>
+          <span className="balance-value">🎰 {(cncBalance ?? casinoBalance).toFixed(2)}</span>
         </div>
       </div>
 
@@ -283,7 +285,7 @@ const ProphecyQuests: React.FC = () => {
                 <button
                   className="verify-button"
                   onClick={handleVerifyQuest}
-                  disabled={!verificationProof.trim() || casinoBalance < selectedQuest.cost}
+                  disabled={!verificationProof.trim() || (cncBalance ?? casinoBalance) < selectedQuest.cost}
                 >
                   Verify Quest
                 </button>

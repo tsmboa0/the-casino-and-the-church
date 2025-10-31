@@ -6,8 +6,10 @@ import CasinoRealm from "./components/CasinoRealm";
 import ChurchRealm from "./components/ChurchRealm";
 import WriteSermons from "./components/church/WriteSermons";
 import ProphecyQuests from "./components/church/ProphecyQuests";
+import QuestPage from "./components/church/QuestPage";
 import SlotMachine from "./components/games/SlotMachine";
 import MemecoinSimulator from "./components/games/MemecoinSimulator";
+import GamesCatalog from "./components/games/GamesCatalog";
 import "./styles/homepage.css";
 import "./styles/wallet.css";
 
@@ -37,9 +39,11 @@ function App() {
             <Route path="/casino" element={<CasinoRealm />} />
             <Route path="/casino/slots" element={<SlotMachine />} />
             <Route path="/casino/memecoin" element={<MemecoinSimulator />} />
+            <Route path="/casino/games" element={<GamesCatalog />} />
             <Route path="/church" element={<ChurchRealm />} />
             <Route path="/church/sermons" element={<WriteSermons />} />
             <Route path="/church/quests" element={<ProphecyQuests />} />
+            <Route path="/church/quests/:questId" element={<QuestPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
