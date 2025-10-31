@@ -67,6 +67,7 @@ The game is divided into two realms:
 
 ---
 
+```mermaid
 flowchart TB
     subgraph External["🌐 External Services & Infrastructure"]
         direction TB
@@ -224,6 +225,7 @@ flowchart TB
     class LiquidityModule,LPFlow,FeeDistribution,LIQ_POOL,LP_VAULT liquidityStyle
     class SOLANA,SWITCHBOARD,SPL_TOKEN externalStyle
     class Program programStyle
+```
 
 ## 🚀 Installation & Setup  
 
