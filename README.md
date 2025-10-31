@@ -67,6 +67,8 @@ The game is divided into two realms:
 
 ---
 
+## Architectural Diagram.
+
 ```mermaid
 flowchart TB
     subgraph External["🌐 External Services & Infrastructure"]
